@@ -28,7 +28,6 @@ const EditModal = (props) => {
   const [imageFormData, setImageFormData] = useState(null);
   const formSubmit = (e) => {
     e.preventDefault();
-    console.log(articleName, description, category, tags, image);
   };
 
   const onFileUpload = (file) => {

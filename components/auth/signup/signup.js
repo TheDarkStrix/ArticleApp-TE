@@ -43,7 +43,6 @@ const SignUp = () => {
 
   const handlePerferences = (e) => {
     if (e.target.checked) {
-      console.log(e.target.id);
       setPreferences([...preferences, e.target.id]);
     } else {
       let position = preferences.indexOf(e.target.id);

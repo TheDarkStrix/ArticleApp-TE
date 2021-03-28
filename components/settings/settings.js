@@ -33,7 +33,7 @@ const Settings = () => {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         // User is signed in.
-        console.log(user);
+
         setUserDetails(user);
         setLoading(false);
       } else {
@@ -78,7 +78,6 @@ const Settings = () => {
   const handlePerferences = (e) => {
     if (e.target.checked) {
       setPreferences[e.target.value] = e.target.value;
-      console.log(e.target.value);
     } else {
       preferences.splice(e.target.value, 1);
     }

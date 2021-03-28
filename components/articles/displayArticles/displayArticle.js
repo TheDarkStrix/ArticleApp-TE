@@ -26,7 +26,6 @@ const DisplayArticle = () => {
   const toggle = () => setModal(!modal);
 
   const checkForValidUser = () => {
-    console.log("check for valid user");
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         // User is signed in.

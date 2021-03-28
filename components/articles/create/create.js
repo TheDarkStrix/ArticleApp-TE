@@ -30,7 +30,7 @@ const CreateModal = (props) => {
   const [imageFormData, setImageFormData] = useState(null);
   const formSubmit = (e) => {
     e.preventDefault();
-    console.log(articleName, description, category, tags, image);
+
     var random = Math.random().toString(36).substring(7);
 
     firebase
@@ -62,14 +62,13 @@ const CreateModal = (props) => {
 
   const onFileUpload = (file) => {
     let formData = new FormData();
-    console.log("image", file.name);
+
     formData.append("myFile", file, file.name);
-    console.log(formData);
+
     setImageFormData(formData);
   };
 
   const onFileChange = async (event) => {
-    console.log("event", event.target.files[0]);
     await setImage(event.target.files[0]);
     await onFileUpload(event.target.files[0]);
   };

@@ -113,11 +113,13 @@ li a.dropdown-toggle::after {
   height: 100vh;
   margin-left: 250px;
   overflow: auto;
+  z-index: -2;
 }
 
 .sidebar + .content {
   margin-left: 0px;
   transition: all 0.25s ease-in-out;
+  overflow: auto;
 }
 
 @media only screen and (max-width: 500px) {

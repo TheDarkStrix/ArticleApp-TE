@@ -32,7 +32,7 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        console.log(userCredential.user);
+
         if (user) {
           addToast("Login Successful", {
             appearance: "success",

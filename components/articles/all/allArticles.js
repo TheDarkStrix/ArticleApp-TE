@@ -1,10 +1,10 @@
 import { Table, Button, Container } from "reactstrap";
-import EditModal from "../Edit/edit";
 import CreateModal from "../create/create";
 import { useRouter } from "next/router";
 import firebase from "../../../firebase";
 import { useToasts } from "react-toast-notifications";
 import { useState, useEffect } from "react";
+import EditModal from "../edit/edit";
 
 const AllArticles = () => {
   const { addToast } = useToasts();
@@ -36,11 +36,10 @@ const AllArticles = () => {
   };
 
   const checkForValidUser = () => {
-    console.log("check for valid user");
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         // User is signed in.
-        console.log(user);
+
         setUserDetails(user);
         fetchAllArticle();
         setLoading(false);
@@ -50,7 +49,7 @@ const AllArticles = () => {
           appearance: "error",
           autoDismiss: true,
         });
-        console.log("not logged in");
+
         router.push("/login");
       }
     });

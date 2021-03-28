@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-var DatePicker = require("reactstrap-date-picker");
+import { useToasts } from "react-toast-notifications";
 import {
   faEnvelope,
   faKey,
@@ -23,8 +23,10 @@ import {
   CustomInput,
 } from "reactstrap";
 import style from "./signup.module.css";
+import firebase from "../../../firebase";
 
 const SignUp = () => {
+  const { addToast } = useToasts();
   //  DOB
   const [currentDate, setCurrentDate] = useState(new Date().toISOString());
   //   Preferences
@@ -39,23 +41,69 @@ const SignUp = () => {
 
   const handlePerferences = (e) => {
     if (e.target.checked) {
-      setPreferences[e.target.value] = e.target.value;
-      console.log(e.target.value);
+      console.log(e.target.id);
+      setPreferences([...preferences, e.target.id]);
     } else {
-      preferences.splice(e.target.value, 1);
+      let position = preferences.indexOf(e.target.id);
+      if (~position) preferences.splice(position, 1);
     }
   };
 
   const formSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
+    console.log(
+      firstName,
+      lastName,
+      email,
+      password,
+      cpassword,
+      phone,
+      currentDate,
+      preferences
+    );
+
+    if (password != cpassword) {
+      addToast("Passwords do not match", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+    } else {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          var userId = firebase.auth().currentUser.uid;
+          firebase
+            .database()
+            .ref("users/" + userId)
+            .set({
+              dob: currentDate,
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              phone: phone,
+              preferences: preferences,
+            });
+
+          addToast("User Created Sucessfully", {
+            appearance: "success",
+            autoDismiss: true,
+          });
+        })
+        .catch((error) => {
+          addToast(error.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        });
+    }
   };
 
   return (
     <>
       <div className={style.signUpContainer}>
         <div className={style.heading}>Sign Up</div>
-        <Form>
+        <Form onSubmit={formSubmit}>
           <Row form>
             <Col md={4}>
               <FormGroup>
@@ -113,6 +161,8 @@ const SignUp = () => {
                     name="phone"
                     id="phone"
                     placeholder="Your Number"
+                    minLength={10}
+                    maxLength={10}
                     required
                     onChange={(e) => setPhone(e.target.value)}
                   />
@@ -155,6 +205,7 @@ const SignUp = () => {
                     name="password"
                     id="examplePassword"
                     placeholder="Your Password"
+                    minLength={6}
                     required
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -175,6 +226,7 @@ const SignUp = () => {
                     name="cpassword"
                     id="cexamplePassword"
                     placeholder="Confirm Password"
+                    minLength={6}
                     required
                     onChange={(e) => setCPassword(e.target.value)}
                   />
@@ -196,9 +248,8 @@ const SignUp = () => {
                     type="date"
                     name="lname"
                     id="lname"
-                    placeholder="Your Last Name"
                     required
-                    onChange={(e) => setLastName(e.target.value)}
+                    onChange={(e) => setCurrentDate(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -210,25 +261,25 @@ const SignUp = () => {
               <div>
                 <CustomInput
                   type="checkbox"
-                  id="exampleCustomCheckbox"
+                  id="General"
                   label="General"
                   onChange={handlePerferences}
                 />
                 <CustomInput
                   type="checkbox"
-                  id="exampleCustomCheckbox1"
+                  id="Sports"
                   label="Sports"
                   onChange={handlePerferences}
                 />
                 <CustomInput
                   type="checkbox"
-                  id="exampleCustomCheckbox2"
+                  id="Politics"
                   label="Politics"
                   onChange={handlePerferences}
                 />
                 <CustomInput
                   type="checkbox"
-                  id="exampleCustomCheckbox3"
+                  id="Gamimg"
                   label="Gamimg"
                   onChange={handlePerferences}
                 />

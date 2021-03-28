@@ -51,7 +51,7 @@ const SideBar = ({ isOpen, toggle }) => {
             {/* <SubMenu title="Home" icon={faHome} items={submenus[0]} /> */}
             <NavItem>
               <div style={{ padding: ".5rem 1rem" }}>
-                <Link href={"/dashboard"}>
+                <Link href={"/"}>
                   <a>
                     <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
                     Home
@@ -62,7 +62,7 @@ const SideBar = ({ isOpen, toggle }) => {
             <SubMenu title="Articles" icon={faCopy} items={submenus[1]} />
             <NavItem>
               <div style={{ padding: ".5rem 1rem" }}>
-                <Link href={"/faq"}>
+                <Link href={"/dashboard/settings"}>
                   <a>
                     <FontAwesomeIcon icon={faQuestion} className="mr-2" />
                     Settings
@@ -71,7 +71,10 @@ const SideBar = ({ isOpen, toggle }) => {
               </div>
             </NavItem>
 
-            <div style={{ padding: ".5rem 1rem" }} onClick={handleLogout}>
+            <div
+              style={{ padding: ".5rem 1rem", cursor: "pointer" }}
+              onClick={handleLogout}
+            >
               <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
               Logout
             </div>
@@ -95,16 +98,8 @@ const submenus = [
   ],
   [
     {
-      title: "Create Article",
-      target: "article/create",
-    },
-    {
       title: "All Articles",
-      target: "article/all",
-    },
-    {
-      itle: "Home 3",
-      target: "Home-3",
+      target: "/article/all",
     },
   ],
 ];

@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useToasts } from "react-toast-notifications";
+import { useRouter } from "next/router";
 import {
   faEnvelope,
   faKey,
@@ -26,6 +27,7 @@ import style from "./signup.module.css";
 import firebase from "../../../firebase";
 
 const SignUp = () => {
+  const router = useRouter();
   const { addToast } = useToasts();
   //  DOB
   const [currentDate, setCurrentDate] = useState(new Date().toISOString());
@@ -91,6 +93,7 @@ const SignUp = () => {
             appearance: "success",
             autoDismiss: true,
           });
+          router.push("/");
         })
         .catch((error) => {
           addToast(error.message, {

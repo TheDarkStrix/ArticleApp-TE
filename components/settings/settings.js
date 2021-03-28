@@ -38,7 +38,11 @@ const Settings = () => {
         setLoading(false);
       } else {
         // No user is signed in.
-        router.push("/login");
+        addToast("Failed to authenticate. " + error.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+        router.push("/");
       }
     });
   };

@@ -4,30 +4,20 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Form,
   Row,
   Col,
   FormGroup,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Label,
   Input,
-  FormText,
 } from "reactstrap";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEnvelope,
-  faKey,
-  faUser,
-  faPhoneAlt,
-  faCalendarDay,
-} from "@fortawesome/free-solid-svg-icons";
+import firebase from "../../../firebase";
+import { useToasts } from "react-toast-notifications";
 
 const CreateModal = (props) => {
+  const { addToast } = useToasts();
   const { className } = props;
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
@@ -41,6 +31,33 @@ const CreateModal = (props) => {
   const formSubmit = (e) => {
     e.preventDefault();
     console.log(articleName, description, category, tags, image);
+    var random = Math.random().toString(36).substring(7);
+
+    firebase
+      .database()
+      .ref("articles/" + random + "article")
+      .set({
+        articleName: articleName,
+        description: description,
+        category: category,
+        tags: tags,
+        likes: 0,
+        dislikes: 0,
+        image: image.name,
+      })
+      .then((data) => {
+        addToast("Article Added", {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        toggle();
+      })
+      .catch((error) => {
+        addToast(error.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      });
   };
 
   const onFileUpload = (file) => {
@@ -122,11 +139,10 @@ const CreateModal = (props) => {
                       id="exampleSelect"
                       onChange={(e) => setCategory(e.target.value)}
                     >
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
+                      <option>General</option>
+                      <option>Sports</option>
+                      <option>Politics</option>
+                      <option>Gaming</option>
                     </Input>
                   </FormGroup>
                 </Col>
@@ -143,10 +159,10 @@ const CreateModal = (props) => {
                 </Col>
               </Row>
               <Row>
-                <Col md={3}>
+                <Col md={4}>
                   <Button color="primary">Create Article</Button>
                 </Col>
-                <Col md={9}>
+                <Col md={8}>
                   <Button
                     className="float-right"
                     color="danger"

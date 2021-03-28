@@ -84,7 +84,9 @@ const SignUp = () => {
               phone: phone,
               preferences: preferences,
             });
-
+          userCredential.user.updateProfile({
+            displayName: firstName + " " + lastName,
+          });
           addToast("User Created Sucessfully", {
             appearance: "success",
             autoDismiss: true,

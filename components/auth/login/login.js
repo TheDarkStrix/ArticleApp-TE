@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
+import { useToasts } from "react-toast-notifications";
 import {
   Button,
   Form,
@@ -13,14 +14,42 @@ import {
   InputGroupText,
 } from "reactstrap";
 import style from "./login.module.css";
+import { useRouter } from "next/router";
+import firebase from "../../../firebase";
 
 const Login = () => {
+  const { addToast } = useToasts();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const router = useRouter();
+
   const formSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in
+        var user = userCredential.user;
+        console.log(userCredential.user);
+        if (user) {
+          addToast("Login Successful", {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          router.push("/");
+        }
+        // ...
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        addToast(error.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      });
   };
 
   return (
